@@ -1,0 +1,8 @@
+# node modules
+node_modules/
+node_modules
+
+#environment variables
+.env.example
+.env
+
