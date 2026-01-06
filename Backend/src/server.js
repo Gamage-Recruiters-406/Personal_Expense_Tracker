@@ -5,6 +5,8 @@ import morgan from "morgan";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import connectDB from './config/database.js';
+import authRouters from "./routes/authRoutes.js";
+
 
 dotenv.config();
 
@@ -17,6 +19,9 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cookieParser());
+
+//router
+app.use("/api/v1/useAuth", authRouters)
 
 app.get("/", (req, res) => {
   res.send({
