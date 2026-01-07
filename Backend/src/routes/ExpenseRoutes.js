@@ -5,7 +5,8 @@ import {
     getAllExpenses,
     getExpenseById,
     updateExpense,
-    deleteExpense
+    deleteExpense,
+    searchExpenses
 } from "../controllers/ExpenseController.js";
 
 const Router = express.Router();
@@ -15,6 +16,9 @@ Router.post("/", requiredSignIn, createExpense);
 
 // Get All Expenses
 Router.get("/expenses", requiredSignIn, getAllExpenses);
+
+// Search Expenses
+Router.get("/expenses/search", requiredSignIn, searchExpenses);
 
 // Get Single Expense
 Router.get("/expenses/:id", requiredSignIn, getExpenseById);
