@@ -1,6 +1,5 @@
 import Expense from "../models/Expense.js";
 import mongoose from "mongoose";
-// 👇 NEW IMPORT
 import { handleError500 } from "../middleware/errorHandler.js";
 
 // GET ANALYTICS SUMMARY
@@ -71,7 +70,6 @@ export const getExpenseSummary = async (req, res) => {
         });
 
     } catch (error) {
-        // 👇 UPDATED Usage
         handleError500(res, error, "Error fetching analytics summary");
     }
 };
@@ -114,7 +112,6 @@ export const getMonthlyTrends = async (req, res) => {
         });
 
     } catch (error) {
-        // 👇 UPDATED Usage
         handleError500(res, error, "Error fetching monthly trends");
     }
 };
