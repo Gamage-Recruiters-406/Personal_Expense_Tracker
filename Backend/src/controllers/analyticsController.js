@@ -1,12 +1,13 @@
 import Expense from "../models/Expense.js";
 import mongoose from "mongoose";
+// 👇 NEW IMPORT
+import { handleError500 } from "../middleware/errorHandler.js";
 
 // GET ANALYTICS SUMMARY
 export const getExpenseSummary = async (req, res) => {
     try {
         const { userid } = req.user;
         
-        // Date Range Logic
         const today = new Date();
         const start = req.query.startDate 
             ? new Date(req.query.startDate) 
@@ -16,7 +17,6 @@ export const getExpenseSummary = async (req, res) => {
             ? new Date(req.query.endDate) 
             : new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59); 
 
-        // The Advanced Aggregation
         const stats = await Expense.aggregate([
             {
                 $match: {
@@ -27,31 +27,13 @@ export const getExpenseSummary = async (req, res) => {
             {
                 $facet: {
                     byCategory: [
-                        {
-                            $group: {
-                                _id: "$category",
-                                total: { $sum: "$amount" },
-                                count: { $sum: 1 }
-                            }
-                        }
+                        { $group: { _id: "$category", total: { $sum: "$amount" }, count: { $sum: 1 } } }
                     ],
                     byPaymentMethod: [
-                        {
-                            $group: {
-                                _id: "$paymentMethod",
-                                total: { $sum: "$amount" },
-                                count: { $sum: 1 }
-                            }
-                        }
+                        { $group: { _id: "$paymentMethod", total: { $sum: "$amount" }, count: { $sum: 1 } } }
                     ],
                     overall: [
-                        {
-                            $group: {
-                                _id: null,
-                                totalExpenses: { $sum: "$amount" },
-                                expenseCount: { $sum: 1 }
-                            }
-                        }
+                        { $group: { _id: null, totalExpenses: { $sum: "$amount" }, expenseCount: { $sum: 1 } } }
                     ]
                 }
             }
@@ -59,7 +41,6 @@ export const getExpenseSummary = async (req, res) => {
 
         const results = stats[0];
         const overall = results.overall[0] || { totalExpenses: 0, expenseCount: 0 };
-        
         const totalExpenses = overall.totalExpenses;
         const expenseCount = overall.expenseCount;
         
@@ -90,15 +71,8 @@ export const getExpenseSummary = async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Analytics Error:", error);
-        
-        res.status(500).json({
-            success: false,
-            error: {
-                message: "Error fetching analytics summary",
-                details: [error.message] 
-            }
-        });
+        // 👇 UPDATED Usage
+        handleError500(res, error, "Error fetching analytics summary");
     }
 };
 
@@ -119,16 +93,11 @@ export const getMonthlyTrends = async (req, res) => {
             },
             {
                 $group: {
-                    _id: {
-                        year: { $year: "$date" },
-                        month: { $month: "$date" }
-                    },
+                    _id: { year: { $year: "$date" }, month: { $month: "$date" } },
                     totalAmount: { $sum: "$amount" }
                 }
             },
-            {
-                $sort: { "_id.year": 1, "_id.month": 1 } 
-            }
+            { $sort: { "_id.year": 1, "_id.month": 1 } }
         ]);
 
         const formattedTrends = trends.map(item => {
@@ -145,14 +114,7 @@ export const getMonthlyTrends = async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Trends Error:", error);
-        
-        res.status(500).json({
-            success: false,
-            error: {
-                message: "Error fetching monthly trends",
-                details: [error.message]
-            }
-        });
+        // 👇 UPDATED Usage
+        handleError500(res, error, "Error fetching monthly trends");
     }
 };
