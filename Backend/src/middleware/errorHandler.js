@@ -1,0 +1,12 @@
+
+
+
+export const handleError = (res, error, message = "Something went wrong") => {
+    console.error(`${message}:`, error);
+    res.status(500).json({
+        success: false,
+        message,
+        error: error.message
+    });
+};
+
