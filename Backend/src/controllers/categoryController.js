@@ -1,5 +1,4 @@
 import Category from "../models/Category.js";
-// 👇 NEW IMPORTS to match your file
 import { handleError500, handleError404 } from "../middleware/errorHandler.js"; 
 
 // Get All Categories
@@ -18,7 +17,6 @@ export const getAllCategories = async (req, res) => {
             data: categories 
         });
     } catch (error) {
-        // 👇 Use 500 for server errors
         handleError500(res, error, "Error fetching categories");
     }
 };
@@ -42,7 +40,6 @@ export const createCategory = async (req, res) => {
         if (error.code === 11000) {
              return res.status(400).json({ success: false, message: "You already have this category" });
         }
-        // 👇 Use 500 for server errors
         handleError500(res, error, "Error creating category");
     }
 };
@@ -58,7 +55,6 @@ export const deleteCategory = async (req, res) => {
         });
 
         if (!category) {
-            // 👇 NEW: Use your 404 handler here!
             return handleError404(res, "Category not found or you do not have permission to delete it");
         }
 
@@ -68,7 +64,6 @@ export const deleteCategory = async (req, res) => {
         });
 
     } catch (error) {
-        // 👇 Use 500 for server errors
         handleError500(res, error, "Error deleting category");
     }
 };
