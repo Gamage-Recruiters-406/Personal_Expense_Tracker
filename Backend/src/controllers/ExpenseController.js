@@ -1,4 +1,5 @@
 import Expense from "../models/Expense.js";
+import { handleError } from "../middleware/errorHandler.js";
 
 // CREATE EXPENSE
 export const createExpense = async (req, res) => {
@@ -23,12 +24,7 @@ export const createExpense = async (req, res) => {
             data: expense
         });
     } catch (error) {
-        console.error("Create expense error:", error);
-        res.status(500).json({
-            success: false,
-            message: "Error creating expense",
-            error: error.message
-        });
+        handleError(res, error, "Error creating expense");
     }
 };
 
@@ -71,12 +67,7 @@ export const getAllExpenses = async (req, res) => {
             }
         });
     } catch (error) {
-        console.error("Get expenses error:", error);
-        res.status(500).json({
-            success: false,
-            message: "Error fetching expenses",
-            error: error.message
-        });
+        handleError(res, error, "Error fetching expenses");
     }
 };
 
@@ -101,12 +92,7 @@ export const getExpenseById = async (req, res) => {
             data: expense
         });
     } catch (error) {
-        console.error("Get expense error:", error);
-        res.status(500).json({
-            success: false,
-            message: "Error fetching expense",
-            error: error.message
-        });
+        handleError(res, error, "Error fetching expense");
     }
 };
 
@@ -132,12 +118,7 @@ export const updateExpense = async (req, res) => {
             data: expense
         });
     } catch (error) {
-        console.error("Update expense error:", error);
-        res.status(500).json({
-            success: false,
-            message: "Error updating expense",
-            error: error.message
-        });
+        handleError(res, error, "Error updating expense");
     }
 };
 
@@ -161,12 +142,7 @@ export const deleteExpense = async (req, res) => {
             message: "Expense deleted successfully"
         });
     } catch (error) {
-        console.error("Delete expense error:", error);
-        res.status(500).json({
-            success: false,
-            message: "Error deleting expense",
-            error: error.message
-        });
+        handleError(res, error, "Error deleting expense");
     }
 };
 
@@ -237,11 +213,6 @@ export const searchExpenses = async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Search expenses error:", error);
-        res.status(500).json({
-            success: false,
-            message: "Error searching expenses",
-            error: error.message
-        });
+        handleError(res, error, "Error searching expenses");
     }
 };
