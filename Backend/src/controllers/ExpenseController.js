@@ -1,5 +1,5 @@
 import Expense from "../models/Expense.js";
-import { handleError } from "../middleware/errorHandler.js";
+import { handleError404, handleError500 } from "../middleware/errorHandler.js";
 
 // CREATE EXPENSE
 export const createExpense = async (req, res) => {
@@ -24,7 +24,7 @@ export const createExpense = async (req, res) => {
             data: expense
         });
     } catch (error) {
-        handleError(res, error, "Error creating expense");
+        handleError500(res, error, "Error creating expense");
     }
 };
 
@@ -67,7 +67,7 @@ export const getAllExpenses = async (req, res) => {
             }
         });
     } catch (error) {
-        handleError(res, error, "Error fetching expenses");
+        handleError500(res, error, "Error fetching expenses");
     }
 };
 
@@ -81,10 +81,7 @@ export const getExpenseById = async (req, res) => {
         });
 
         if (!expense) {
-            return res.status(404).json({
-                success: false,
-                message: "Expense not found"
-            });
+            return handleError404(res, error, "Expense not found");
         }
 
         res.status(200).json({
@@ -92,7 +89,7 @@ export const getExpenseById = async (req, res) => {
             data: expense
         });
     } catch (error) {
-        handleError(res, error, "Error fetching expense");
+        handleError500(res, error, "Error fetching expense");
     }
 };
 
@@ -105,11 +102,8 @@ export const updateExpense = async (req, res) => {
             { new: true, runValidators: true }
         );
 
-        if (!expense) {
-            return res.status(404).json({
-                success: false,
-                message: "Expense not found or unauthorized"
-            });
+        if (expense) {
+            return handleError404(res, "Expense not found or unauthorized");
         }
 
         res.status(200).json({
@@ -118,7 +112,7 @@ export const updateExpense = async (req, res) => {
             data: expense
         });
     } catch (error) {
-        handleError(res, error, "Error updating expense");
+        handleError500(res, error, "Error updating expense");
     }
 };
 
@@ -131,10 +125,7 @@ export const deleteExpense = async (req, res) => {
         });
 
         if (!expense) {
-            return res.status(404).json({
-                success: false,
-                message: "Expense not found or unauthorized"
-            });
+            return handleError404(res, "Expense not found or unauthorized");
         }
 
         res.status(200).json({
@@ -142,7 +133,7 @@ export const deleteExpense = async (req, res) => {
             message: "Expense deleted successfully"
         });
     } catch (error) {
-        handleError(res, error, "Error deleting expense");
+        handleError500(res, error, "Error deleting expense");
     }
 };
 
@@ -213,6 +204,6 @@ export const searchExpenses = async (req, res) => {
         });
 
     } catch (error) {
-        handleError(res, error, "Error searching expenses");
+        handleError500(res, error, "Error searching expenses");
     }
 };

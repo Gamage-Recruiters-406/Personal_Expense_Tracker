@@ -1,7 +1,7 @@
 
 
 
-export const handleError = (res, error, message = "Something went wrong") => {
+export const handleError500 = (res, error, message) => {
     console.error(`${message}:`, error);
     res.status(500).json({
         success: false,
@@ -9,4 +9,16 @@ export const handleError = (res, error, message = "Something went wrong") => {
         error: error.message
     });
 };
+
+
+export const handleError404 = (res, message) => {
+    console.error(`${message}:`);
+    res.status(404).json({
+        success: false,
+        message,
+    });
+};
+
+
+
 
