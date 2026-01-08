@@ -103,7 +103,7 @@ export const updateExpense = async (req, res) => {
         );
 
         if (expense) {
-            return handleError404(res, error, "Expense not found or unauthorized");
+            return handleError404(res, "Expense not found or unauthorized");
         }
 
         res.status(200).json({
