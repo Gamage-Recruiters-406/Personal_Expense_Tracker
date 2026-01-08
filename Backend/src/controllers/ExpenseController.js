@@ -5,13 +5,8 @@ export const createExpense = async (req, res) => {
     try {
         const { amount, description, category, date, paymentMethod } = req.body;
 
-        // Validation
-        if (!amount || !description || !category || !date || !paymentMethod) {
-            return res.status(400).json({
-                success: false,
-                message: "All fields are required"
-            });
-        }
+        // Validation handled by middleware
+
 
         const expense = await Expense.create({
             amount,

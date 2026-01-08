@@ -1,5 +1,6 @@
 import express from "express";
 import { requiredSignIn } from "../middleware/auth.js";
+import { validateExpense } from "../middleware/Validations.js";
 import {
     createExpense,
     getAllExpenses,
@@ -12,7 +13,7 @@ import {
 const Router = express.Router();
 
 // Create Expense
-Router.post("/", requiredSignIn, createExpense);
+Router.post("/", requiredSignIn, validateExpense, createExpense);
 
 // Get All Expenses
 Router.get("/expenses", requiredSignIn, getAllExpenses);
@@ -24,7 +25,7 @@ Router.get("/expenses/search", requiredSignIn, searchExpenses);
 Router.get("/expenses/:id", requiredSignIn, getExpenseById);
 
 // Update Expense
-Router.put("/expenses/:id", requiredSignIn, updateExpense);
+Router.put("/expenses/:id", requiredSignIn, validateExpense, updateExpense);
 
 // Delete Expense
 Router.delete("/expenses/:id", requiredSignIn, deleteExpense);
