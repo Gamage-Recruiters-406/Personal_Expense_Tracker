@@ -1,12 +1,14 @@
 import Category from "../models/Category.js";
+// 👇 NEW IMPORTS to match your file
+import { handleError500, handleError404 } from "../middleware/errorHandler.js"; 
 
-// Get All Categories (System + Custom)
+// Get All Categories
 export const getAllCategories = async (req, res) => {
     try {
         const categories = await Category.find({
             $or: [
-                { userId: null },              
-                { userId: req.user.userid }    
+                { userId: null },
+                { userId: req.user.userid }
             ]
         });
 
@@ -16,20 +18,16 @@ export const getAllCategories = async (req, res) => {
             data: categories 
         });
     } catch (error) {
-        console.error("Error fetching categories:", error);
-        res.status(500).json({
-            success: false,
-            message: "Error fetching categories",
-            error: error.message
-        });
+        // 👇 Use 500 for server errors
+        handleError500(res, error, "Error fetching categories");
     }
 };
 
-// Create Custom Category 
+// Create Category
 export const createCategory = async (req, res) => {
     try {
         const { name } = req.body;
-
+        
         const newCategory = await Category.create({
             name,
             userId: req.user.userid 
@@ -44,11 +42,12 @@ export const createCategory = async (req, res) => {
         if (error.code === 11000) {
              return res.status(400).json({ success: false, message: "You already have this category" });
         }
-        res.status(500).json({ success: false, message: "Error creating category", error: error.message });
+        // 👇 Use 500 for server errors
+        handleError500(res, error, "Error creating category");
     }
 };
 
-// DELETE CATEGORY
+// Delete Category
 export const deleteCategory = async (req, res) => {
     try {
         const { id } = req.params;
@@ -59,10 +58,8 @@ export const deleteCategory = async (req, res) => {
         });
 
         if (!category) {
-            return res.status(404).json({
-                success: false,
-                message: "Category not found or you do not have permission to delete it"
-            });
+            // 👇 NEW: Use your 404 handler here!
+            return handleError404(res, "Category not found or you do not have permission to delete it");
         }
 
         res.status(200).json({
@@ -71,11 +68,7 @@ export const deleteCategory = async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Delete Category Error:", error);
-        res.status(500).json({
-            success: false,
-            message: "Error deleting category",
-            error: error.message
-        });
+        // 👇 Use 500 for server errors
+        handleError500(res, error, "Error deleting category");
     }
 };
