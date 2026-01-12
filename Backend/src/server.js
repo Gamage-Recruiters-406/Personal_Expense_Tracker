@@ -5,7 +5,11 @@ import morgan from "morgan";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import connectDB from './config/database.js';
+
 import authRouters from "./routes/authRoutes.js";
+import expenseRouters from "./routes/ExpenseRoutes.js";
+import categoryRoutes from "./routes/categoryRoutes.js"; 
+import analyticsRoutes from "./routes/analyticsRoutes.js"; 
 
 
 dotenv.config();
@@ -22,6 +26,9 @@ app.use(cookieParser());
 
 //router
 app.use("/api/v1/useAuth", authRouters)
+app.use("/api/v1/expense", expenseRouters)
+app.use("/api/v1/category", categoryRoutes);
+app.use("/api/v1/analytics", analyticsRoutes);
 
 app.get("/", (req, res) => {
   res.send({
@@ -32,6 +39,6 @@ app.get("/", (req, res) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log(`Server Running on ${process.env.DEV_MODE} mode`.bgCyan.white);
-    console.log(`Server is running on port ${PORT}`.bgCyan.white)
+  console.log(`Server Running on ${process.env.DEV_MODE} mode`.bgCyan.white);
+  console.log(`Server is running on port ${PORT}`.bgCyan.white)
 });
