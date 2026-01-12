@@ -1,0 +1,30 @@
+{
+  "default_branch": "main",
+  "branches": [
+    "Category-Management",
+    "Expense-Management-AD",
+    "UserFunctoin",
+    "backend",
+    "developing",
+    "frontend",
+    "main"
+  ],
+  "parent": {
+    "Category-Management": "main",
+    "Expense-Management-AD": "main",
+    "UserFunctoin": "main",
+    "backend": "main",
+    "developing": "main",
+    "frontend": "main",
+    "main": null
+  },
+  "order": [
+    "main",
+    "Category-Management",
+    "Expense-Management-AD",
+    "UserFunctoin",
+    "backend",
+    "developing",
+    "frontend"
+  ]
+}
